@@ -41,22 +41,22 @@ def getAllBuildDefinitions(project: AzDevOpsProject) -> List[BuildDefinition]:
     return result
 
 
-def syncBuildDefinitions(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
+def syncBuildDefinitions(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync build definitions ===')
 
     oldIdsToNewRepoId: Dict[str, str] = getRepositoryMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
     oldIdsToNewTaskGroupId: Dict[str, str] = getTaskGroupMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
     oldIdsToNewServiceEndpointId: Dict[str, str] = getServiceEndpointMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
     oldIdsToNewSecureFileId: Dict[str, str] = getSecureFileMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
     oldIdsToNewVariableGrouptId: Dict[int, int] = getVariableGroupMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
 
     oldIdsToNewIds = {**oldIdsToNewRepoId, **oldIdsToNewTaskGroupId,
-                      **oldIdsToNewServiceEndpointId, **oldIdsToNewSecureFileId, }
+                      **oldIdsToNewServiceEndpointId, **oldIdsToNewSecureFileId}
 
     for buildDef in getAllBuildDefinitions(srcProject):
         print(f'Processing {buildDef.name}...')
@@ -89,7 +89,6 @@ def syncBuildDefinitions(destProject: AzDevOpsProject, srcProject: AzDevOpsProje
             triggers=buildDef.triggers,
             variable_groups=buildDef.variable_groups,
             variables=buildDef.variables,
-
         )
 
         buildDefJson = newDefinition.as_dict()
@@ -99,11 +98,10 @@ def syncBuildDefinitions(destProject: AzDevOpsProject, srcProject: AzDevOpsProje
 
         destProject.buildClient.create_definition(
             newDefinition, destProject.project_name)
-        # break
 
 
 def deleteAllBuildDefinitions(project: AzDevOpsProject):
-    print('=== Delete all task groups ===')
+    print('=== Delete all build definitions ===')
     for buildDefRef in getAllBuildDefinitionReferences(project):
         print(f'Deleting {buildDefRef.name}')
         project.buildClient.delete_definition(

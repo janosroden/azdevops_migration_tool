@@ -22,7 +22,7 @@ def getVariableGroupMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsPr
     )
 
 
-def syncVariableGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
+def syncVariableGroups(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync variable groups ===')
 
     variableGroup: VariableGroup = None

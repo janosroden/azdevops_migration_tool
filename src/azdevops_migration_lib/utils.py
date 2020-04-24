@@ -27,9 +27,9 @@ class ResourceMapping():
         self._dstResByNatural = {self.naturalKeyFunc(
             res): res for res in self.destinationResources}
 
-    def asDict(self, keyData: ResourceData, valueData: ResourceData):
-        keyFunction = self._funcForResourceData(keyData)
-        valueFunction = self._funcForResourceData(valueData)
+    def asDict(self, key: ResourceData = ResourceData.ID_SRC, value: ResourceData = ResourceData.ID_DST):
+        keyFunction = self._funcForResourceData(key)
+        valueFunction = self._funcForResourceData(value)
 
         result = {}
         for naturalKey, srcRes in self._srcResByNatural.items():

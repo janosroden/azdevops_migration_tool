@@ -26,13 +26,13 @@ def getTaskGroupMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProjec
     )
 
 
-def syncTaskGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
+def syncTaskGroups(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync task groups ===')
 
     oldIdsToNewServiceEndpointId: Dict[str, str] = getServiceEndpointMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
     oldIdsToNewSecureFileId: Dict[str, str] = getSecureFileMapping(
-        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+        srcProject, destProject).asDict()
 
     oldIdsToNewIds = {**oldIdsToNewServiceEndpointId,
                       **oldIdsToNewSecureFileId, }

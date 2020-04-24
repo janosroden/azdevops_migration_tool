@@ -19,7 +19,7 @@ def getServiceEndpointMapping(srcProject: AzDevOpsProject, destProject: AzDevOps
     )
 
 
-def syncServiceEndpoints(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
+def syncServiceEndpoints(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync service endpoints ===')
 
     destSeNames: List[str] = [

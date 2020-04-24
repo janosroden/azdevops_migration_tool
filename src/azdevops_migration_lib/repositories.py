@@ -24,7 +24,7 @@ def getRepositoryMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProje
     )
 
 
-def syncRepositories(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
+def syncRepositories(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync repositories ===')
 
     for repo in getAllRepositories(srcProject):
