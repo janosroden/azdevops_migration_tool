@@ -1,18 +1,25 @@
 from typing import List, Dict
 
 from azure.devops.client import AzureDevOpsServiceError
-from azure.devops.v5_1.task_agent import TaskAgentClient
-
-from azure.devops.v5_1.task_agent.models import (
+from azure.devops.v5_1.task_agent import (
+    TaskAgentClient,
     VariableGroup,
     VariableGroupParameters,
 )
 
 from .azdevops_project import AzDevOpsProject
+from .utils import ResourceMapping
 
 
 def getAllVariableGroups(project: AzDevOpsProject) -> List[VariableGroup]:
     return project.taskAgentClient.get_variable_groups(project.project_name)
+
+
+def getVariableGroupMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
+    return ResourceMapping(
+        getAllVariableGroups(srcProject),
+        getAllVariableGroups(destProject),
+    )
 
 
 def syncVariableGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):

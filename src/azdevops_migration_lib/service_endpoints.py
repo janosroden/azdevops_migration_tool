@@ -5,10 +5,18 @@ from azure.devops.v5_1.service_endpoint import ServiceEndpointClient
 from azure.devops.v5_1.service_endpoint.models import ServiceEndpoint
 
 from .azdevops_project import AzDevOpsProject
+from .utils import ResourceMapping
 
 
 def getAllServiceEndpoints(project: AzDevOpsProject) -> List[ServiceEndpoint]:
     return project.serviceEndpointClient.get_service_endpoints(project.project_name, include_details=True)
+
+
+def getServiceEndpointMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
+    return ResourceMapping(
+        getAllServiceEndpoints(srcProject),
+        getAllServiceEndpoints(destProject),
+    )
 
 
 def syncServiceEndpoints(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):

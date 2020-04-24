@@ -1,7 +1,7 @@
 from typing import List, Dict
 
 from azure.devops.client import AzureDevOpsServiceError
-from azure.devops.v5_1.task_agent.models import (
+from azure.devops.v5_1.task_agent import (
     TaskGroup,
     TaskGroupCreateParameter,
     TaskGroupStep,
@@ -9,15 +9,33 @@ from azure.devops.v5_1.task_agent.models import (
 )
 
 from .azdevops_project import AzDevOpsProject
+from .service_endpoints import getServiceEndpointMapping
+from .secure_files import getSecureFileMapping
 from .export import toExportJson
+from .utils import ResourceMapping, ResourceData, replaceAllInJson
 
 
 def getAllTaskGroups(project: AzDevOpsProject) -> List[TaskGroup]:
     return project.taskAgentClient.get_task_groups(project.project_name)
 
 
+def getTaskGroupMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
+    return ResourceMapping(
+        getAllTaskGroups(srcProject),
+        getAllTaskGroups(destProject),
+    )
+
+
 def syncTaskGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
     print('=== Sync task groups ===')
+
+    oldIdsToNewServiceEndpointId: Dict[str, str] = getServiceEndpointMapping(
+        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+    oldIdsToNewSecureFileId: Dict[str, str] = getSecureFileMapping(
+        srcProject, destProject).asDict(ResourceData.ID_SRC, ResourceData.ID_DST)
+
+    oldIdsToNewIds = {**oldIdsToNewServiceEndpointId,
+                      **oldIdsToNewSecureFileId, }
 
     destTaskGroupsByName: Dict[str, TaskGroup] = {
         taskGroup.name: taskGroup for taskGroup in getAllTaskGroups(destProject)}
@@ -51,6 +69,12 @@ def syncTaskGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
                         print(
                             f'Skip translating build step {taskGroupStep.display_name}, already exists')
             else:
+                taskGroup.tasks = taskGroupSteps
+                taskGroupJson = taskGroup.as_dict()
+                taskGroupJson = replaceAllInJson(
+                    taskGroupJson, oldIdsToNewIds)
+                taskGroup = TaskGroup.from_dict(taskGroupJson)
+
                 taskGroup = destProject.taskAgentClient.add_task_group(
                     TaskGroupCreateParameter(
                         name=taskGroup.name,
@@ -62,7 +86,7 @@ def syncTaskGroups(destProject: AzDevOpsProject, srcProject: AzDevOpsProject):
                         icon_url=taskGroup.icon_url,
                         instance_name_format=taskGroup.instance_name_format,
                         runs_on=taskGroup.runs_on,
-                        tasks=taskGroupSteps,
+                        tasks=taskGroup.tasks,
                         version=taskGroup.version,
                     ), destProject.project_name,
                 )
