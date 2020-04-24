@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Set
 
 from azure.devops.client import AzureDevOpsServiceError
 from azure.devops.v5_1.task_agent import (
@@ -42,9 +42,12 @@ def syncTaskGroups(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     srcTaskGroupsById: Dict[str, TaskGroup] = {
         taskGroup.id: taskGroup for taskGroup in getAllTaskGroups(srcProject)}
 
-    while len(destTaskGroupsByName) < len(srcTaskGroupsById):
+    srcTaskGroupNames: Set[str] = {
+        taskGroup.name for taskGroup in srcTaskGroupsById.values()}
+
+    while not srcTaskGroupNames.issubset(destTaskGroupsByName.keys()):
         print(
-            f'Task group count: dst: {len(destTaskGroupsByName)}, src: {len(srcTaskGroupsById)}')
+            f'Task groups: {len(set(destTaskGroupsByName.keys()).intersection(srcTaskGroupNames))}/{len(srcTaskGroupNames)}')
 
         for _, taskGroup in srcTaskGroupsById.items():
             if taskGroup.name in destTaskGroupsByName:
