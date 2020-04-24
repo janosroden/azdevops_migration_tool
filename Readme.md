@@ -5,7 +5,8 @@ Supported resources:
 - Variable groups
 - Task groups
 - Git repositories
-- Builds
+- Build definition folders
+- Build definitions
 
 # Prerequisites
 

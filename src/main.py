@@ -10,6 +10,7 @@ from azdevops_migration_lib.service_endpoints import syncServiceEndpoints, delet
 from azdevops_migration_lib.variable_groups import syncVariableGroups, deleteAllVariableGroups
 from azdevops_migration_lib.task_groups import syncTaskGroups, deleteAllTaskGroups
 from azdevops_migration_lib.build_definitions import syncBuildDefinitions, deleteAllBuildDefinitions
+from azdevops_migration_lib.build_definition_folders import syncBuildDefinitionFolders, deleteAllBuildDefinitionFolders
 import azdevops_migration_lib.secure_files as secure_files
 
 
@@ -36,13 +37,17 @@ secure_files.predefinedSecureFiles = {
     },
 }
 
-# deleteAllTaskGroups(destinationProject)
+# # deleteAllServiceEndpoints(destinationProject)
+# syncServiceEndpoints(sourceProject, destinationProject)
+
+# # deleteAllVariableGroups(destinationProject)
+# syncVariableGroups(sourceProject, destinationProject)
+
+# # deleteAllTaskGroups(destinationProject)
 # syncTaskGroups(sourceProject, destinationProject)
 
-deleteAllBuildDefinitions(destinationProject)
-syncBuildDefinitions(sourceProject, destinationProject)
+# # deleteAllBuildDefinitionFolders(destinationProject)
+# syncBuildDefinitionFolders(sourceProject, destinationProject)
 
-# deleteAllVariableGroups(destinationProject)
-
-# syncServiceEndpoints(sourceProject, destinationProject)
-# syncVariableGroups(sourceProject, destinationProject)
+# # deleteAllBuildDefinitions(destinationProject)
+# syncBuildDefinitions(sourceProject, destinationProject)

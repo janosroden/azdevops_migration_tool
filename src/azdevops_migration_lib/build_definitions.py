@@ -68,7 +68,7 @@ def syncBuildDefinitions(srcProject: AzDevOpsProject, destProject: AzDevOpsProje
 
         newDefinition = BuildDefinition(
             name=buildDef.name,
-            # path='/',
+            path=buildDef.path,
             type=buildDef.type,
             quality=buildDef.quality,
             queue=AgentPoolQueue(name='Default'),
