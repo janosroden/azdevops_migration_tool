@@ -44,6 +44,9 @@ def getAllBuildDefinitions(project: AzDevOpsProject) -> List[BuildDefinition]:
 def syncBuildDefinitions(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync build definitions ===')
 
+    existingBuildNames = [
+        b.name for b in getAllBuildDefinitionReferences(destProject)]
+
     oldIdsToNewRepoId: Dict[str, str] = getRepositoryMapping(
         srcProject, destProject).asDict()
     oldIdsToNewTaskGroupId: Dict[str, str] = getTaskGroupMapping(
@@ -59,6 +62,10 @@ def syncBuildDefinitions(srcProject: AzDevOpsProject, destProject: AzDevOpsProje
                       **oldIdsToNewServiceEndpointId, **oldIdsToNewSecureFileId}
 
     for buildDef in getAllBuildDefinitions(srcProject):
+        if buildDef.name in existingBuildNames:
+            print(f'Skipping {buildDef.name}, already exists')
+            continue
+
         print(f'Processing {buildDef.name}...')
 
         if buildDef.variable_groups:
