@@ -1,6 +1,8 @@
 from typing import List, Dict
 from functools import cached_property
 
+from msrest.authentication import BasicAuthentication
+
 from azure.devops.connection import Connection
 from azure.devops.v5_1.task_agent import TaskAgentClient
 from azure.devops.v5_1.service_endpoint import ServiceEndpointClient
@@ -26,13 +28,18 @@ class AzDevOpsProject():
     def gitClient(self) -> GitClient:
         return self._getClientFromCache(GitClient, self.connection.clients_v5_1.get_git_client)
 
-    def __init__(self, connection: Connection, name: str):
+    def __init__(self, baseUrl: str = None, loginEmail: str = None, loginPAT: str = None, projectName: str = None):
         super().__init__()
 
         self._apiClientCache = {}
 
-        self.connection = connection
-        self.project_name = name
+        self.connection = Connection(
+            baseUrl, creds=BasicAuthentication(loginEmail, loginPAT))
+
+        self.baseUrl = baseUrl
+        self.project_name = projectName
+        self.username = loginEmail
+        self.password = loginPAT
 
     def _getClientFromCache(self, client_type, factory_function):
         if client_type not in self._apiClientCache:

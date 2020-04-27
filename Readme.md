@@ -48,6 +48,12 @@ This script unable to migrate endpoints which can't be fully queried. If you see
 during service endpoint creation then go and create the failed endpoints with the proper
 type manually and give them the **same name** as original.
 
+## GIT repositories
+
+1. You have to change default and compare branches if they aren't the defaults.
+1. Also you have to setup branch policies if any.
+
+
 ## Secure files
 
 There is no API to manage secure files, you have to create them manually and hard-code

@@ -11,23 +11,22 @@ from azdevops_migration_lib.variable_groups import syncVariableGroups, deleteAll
 from azdevops_migration_lib.task_groups import syncTaskGroups, deleteAllTaskGroups
 from azdevops_migration_lib.build_definitions import syncBuildDefinitions, deleteAllBuildDefinitions
 from azdevops_migration_lib.build_definition_folders import syncBuildDefinitionFolders, deleteAllBuildDefinitionFolders
+from azdevops_migration_lib.repositories import syncRepositories, deleteAllRepositories
 import azdevops_migration_lib.secure_files as secure_files
 
 
 sourceProject = AzDevOpsProject(
-    Connection(base_url='https://dev.azure.com/<src org>',
-               creds=BasicAuthentication(
-                   '', '<Read-only PAT>'),
-               ),
-    '<Project name>',
+    baseUrl='https://dev.azure.com/<src org>',
+    loginEmail='email@example.com',
+    loginPAT='<Read-only PAT>',
+    projectName='<Project name>',
 )
 
 destinationProject = AzDevOpsProject(
-    Connection(base_url='https://dev.azure.com/<destination org>',
-               creds=BasicAuthentication(
-                   '', 'PAT'),
-               ),
-    '<Project name>',
+    baseUrl='https://dev.azure.com/<destination org>',
+    loginEmail='email@example.com',
+    loginPAT='PAT',
+    projectName='<Project name>',
 )
 
 secure_files.predefinedSecureFiles = {
@@ -42,6 +41,10 @@ secure_files.predefinedSecureFiles = {
 
 # # deleteAllVariableGroups(destinationProject)
 # syncVariableGroups(sourceProject, destinationProject)
+
+# # For some reason not allowed to delete all, the last delete will fail
+# # deleteAllRepositories(destinationProject)
+# syncRepositories(sourceProject, destinationProject)
 
 # # deleteAllTaskGroups(destinationProject)
 # syncTaskGroups(sourceProject, destinationProject)
