@@ -41,6 +41,13 @@ def getAllBuildDefinitions(project: AzDevOpsProject) -> List[BuildDefinition]:
     return result
 
 
+def getBuildDefinitionMapping(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
+    return ResourceMapping(
+        getAllBuildDefinitions(srcProject),
+        getAllBuildDefinitions(destProject),
+    )
+
+
 def syncBuildDefinitions(srcProject: AzDevOpsProject, destProject: AzDevOpsProject):
     print('=== Sync build definitions ===')
 
