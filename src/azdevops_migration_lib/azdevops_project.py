@@ -8,6 +8,7 @@ from azure.devops.v5_1.task_agent import TaskAgentClient
 from azure.devops.v5_1.service_endpoint import ServiceEndpointClient
 from azure.devops.v5_1.build import BuildClient
 from azure.devops.v5_1.git import GitClient
+from azure.devops.v5_1.release import ReleaseClient
 
 
 class AzDevOpsProject():
@@ -27,6 +28,10 @@ class AzDevOpsProject():
     @property
     def gitClient(self) -> GitClient:
         return self._getClientFromCache(GitClient, self.connection.clients_v5_1.get_git_client)
+
+    @property
+    def releaseClient(self) -> ReleaseClient:
+        return self._getClientFromCache(ReleaseClient, self.connection.clients_v5_1.get_release_client)
 
     def __init__(self, baseUrl: str = None, loginEmail: str = None, loginPAT: str = None, projectName: str = None):
         super().__init__()

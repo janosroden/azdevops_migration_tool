@@ -12,6 +12,7 @@ from azdevops_migration_lib.task_groups import syncTaskGroups, deleteAllTaskGrou
 from azdevops_migration_lib.build_definitions import syncBuildDefinitions, deleteAllBuildDefinitions
 from azdevops_migration_lib.build_definition_folders import syncBuildDefinitionFolders, deleteAllBuildDefinitionFolders
 from azdevops_migration_lib.repositories import syncRepositories, deleteAllRepositories
+from azdevops_migration_lib.release_definitions import syncReleaseDefinitions, deleteAllReleaseDefinitions
 import azdevops_migration_lib.secure_files as secure_files
 
 
@@ -34,6 +35,10 @@ secure_files.predefinedSecureFiles = {
         sourceProject: '9af73789-d227-46b7-980d-2488e6f1b648',
         destinationProject: '3a41393c-d8f9-4013-bb2b-02f3b9b2d17a',
     },
+    'google_play_json_key_file.json': {
+        sourceProject: '3691a224-0a4c-4386-b344-201f647de9f5',
+        destinationProject: '3123efb1-fd1b-404e-ba01-773deb680831',
+    },
 }
 
 # # deleteAllServiceEndpoints(destinationProject)
@@ -54,3 +59,6 @@ secure_files.predefinedSecureFiles = {
 
 # # deleteAllBuildDefinitions(destinationProject)
 # syncBuildDefinitions(sourceProject, destinationProject)
+
+# # deleteAllReleaseDefinitions(destinationProject)
+# syncReleaseDefinitions(sourceProject, destinationProject)

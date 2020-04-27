@@ -9,6 +9,7 @@ Supported resources:
 - Git repositories
 - Build definition folders
 - Build definitions
+- Release definitions
 
 # Prerequisites
 
@@ -77,3 +78,5 @@ ht<span>tps://dev.azure.</span>com/example/MyProject/_library?itemType=SecureFil
 1. Don't rush, migrate one resource type at a time.
 1. Always check the result.
 1. Use read-only PAT for the source project, just in case
+1. Builds are modified to run in `Default` agent pool
+1. Agent pool information is deleted for release jobs
